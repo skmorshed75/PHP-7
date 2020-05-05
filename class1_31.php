@@ -15,7 +15,7 @@ $lat = isset($user_lat) ? $user_lat : $default_lat;
 echo $lat;
 
 echo "\n==============================\n";
-//Null Coalescing Operator
+//Null Coalese Operator
 $lat = $user_lat ?? $default_lat;
 echo $lat;
 
