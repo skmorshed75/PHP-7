@@ -12,6 +12,10 @@ if ( 'seed' == $task ) {
 }
 
 //Class 8.3
+$fname ='';
+$lname= '';
+$roll='';
+
 if(isset($_POST['submit'])){
     $fname = filter_input(INPUT_POST,'fname',FILTER_SANITIZE_STRING);
     $lname = filter_input(INPUT_POST,'lname',FILTER_SANITIZE_STRING);
@@ -22,7 +26,7 @@ if(isset($_POST['submit'])){
         if($result) {
             header('location:/php7lwhh/crud/index.php?task=report'); //AVOID PAGE RESUBMISION
         } else {
-            header('location:/php7lwhh/crud/index.php?task=report&error=1');
+            $error = 1;
         }
     }
 }
@@ -60,7 +64,7 @@ if(isset($_POST['submit'])){
         }
 
         blockquote {
-            color: red;
+            color: red; font-weight:700; font-size:18px;
         }
 
     </style>
@@ -103,20 +107,20 @@ if(isset($_POST['submit'])){
     ?>
         <div class="row">
             <div class="col-6 offset-3">
-                <form action="/php7lwhh/crud/index.php?report" method="POST">
+                <form action="/php7lwhh/crud/index.php?task=add" method="POST">
                     <div class="form-group">
                         <label for="fname">First Name</label>
-                        <input type="text" name="fname" id="fname" class="form-control">
+                        <input type="text" name="fname" id="fname" class="form-control" value = <?php echo $fname; ?>>
                     </div>
 
                     <div class="form-group">
                         <label for="lname">Last Name</label>
-                        <input type="text" name="lname" id="lname" class="form-control">
+                        <input type="text" name="lname" id="lname" class="form-control" value = <?php echo $lname; ?>>
                     </div>
 
                     <div class="form-group">
                         <label for="roll">roll</label>
-                        <input type="number" name="roll" id="roll" class="form-control">
+                        <input type="number" name="roll" id="roll" class="form-control" value=<?php echo $roll; ?>>
                     </div>
                     <button type="submit" class="btn btn-primary" name="submit">Save</button>
                 </form>
