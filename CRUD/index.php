@@ -6,6 +6,16 @@ $info = '';
 $task = $_GET['task'] ?? 'report';
 $error = $_GET['error'] ?? '0';
 
+//Class 8.6
+if('delete' == $task){
+    $id = filter_input(INPUT_GET,'id',FILTER_SANITIZE_STRING);
+    if ($id >0){
+        deleteStudent($id); //FUNCTION
+        header('location:/php7lwhh/crud/index.php?task=report');
+    }
+}
+//End Class 8.6
+
 if ( 'seed' == $task ) {
     seed();
     $info = "Seeding is completed.";
@@ -20,14 +30,29 @@ if(isset($_POST['submit'])){
     $fname = filter_input(INPUT_POST,'fname',FILTER_SANITIZE_STRING);
     $lname = filter_input(INPUT_POST,'lname',FILTER_SANITIZE_STRING);
     $roll = filter_input(INPUT_POST,'roll',FILTER_SANITIZE_STRING);
+    $id = filter_input(INPUT_POST,'id',FILTER_SANITIZE_STRING);
 
-    if($fname != '' && $lname != '' && $roll != ''){
-        $result = addStudent($fname, $lname, $roll);
-        if($result) {
-            header('location:/php7lwhh/crud/index.php?task=report'); //AVOID PAGE RESUBMISION
-        } else {
-            $error = 1;
+    if($id) {
+        //UPDATE EXISTING DATA
+        if($fname != '' && $lname != '' && $roll != '') {
+            $result = updateStudent($id, $fname, $lname, $roll);
+            if($result) {
+                header('location:/php7lwhh/crud/index.php?task=report'); //AVOID PAGE RESUBMISION
+            } else {
+                $error = 1;
+            }
         }
+    } else {
+        //ADD NEW DATA
+        if($fname != '' && $lname != '' && $roll != ''){
+            $result = addStudent($fname, $lname, $roll);
+            if($result) {
+                header('location:/php7lwhh/crud/index.php?task=report'); //AVOID PAGE RESUBMISION
+            } else {
+                $error = 1;
+            }
+        }
+
     }
 }
 ?>
@@ -98,6 +123,11 @@ if(isset($_POST['submit'])){
         <div class="row">
             <div class="col-6 offset-3">
                 <?php generateReport();?>
+                <!-- <div>
+                    <pre>
+                        <?php //printRaw(); //FUNCTION for checking through print_r ?> 
+                    </pre>
+                </div> -->
             </div>
         </div>
     <?php endif; ?>
@@ -129,6 +159,42 @@ if(isset($_POST['submit'])){
     <?php 
     endif;
     ?>
+
+    <?php
+    //Class 8.5
+    
+    if ( 'edit' == $task ): 
+        $id = filter_input( INPUT_GET, 'id', FILTER_SANITIZE_STRING );   
+        $student = getStudent( $id );
+        if ( $student ):
+            ?>
+            <div class="row">
+                <div class="col-6 offset-3">
+                    <form method="POST">
+                        <input type="hidden" name="id" value=<?php echo $id; ?>>
+                        <div class="form-group">
+                            <label for="fname">First Name</label>
+                            <input type="text" name="fname" id="fname" class="form-control" value = <?php echo $student['fname']; ?>>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="lname">Last Name</label>
+                            <input type="text" name="lname" id="lname" class="form-control" value = <?php echo $student['lname']; ?>>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="roll">roll</label>
+                            <input type="number" name="roll" id="roll" class="form-control" value=<?php echo $student['roll']; ?>>
+                        </div>
+                        <button type="submit" class="btn btn-primary" name="submit">Update</button>
+                    </form>
+                </div>
+            </div>
+        <?php
+        endif;
+    endif;
+    ?>
 </div>
+<script type="text/javascript" src="assets/js/script.js"></script>
 </body>
 </html>
